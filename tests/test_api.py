@@ -17,6 +17,12 @@ def test_add_endpoint():
     assert r.json() == {"result": 5}
 
 
+def test_multiply_endpoint():
+    r = client.get("/multiply", params={"a": 4, "b": 3})
+    assert r.status_code == 200
+    assert r.json() == {"result": 12}
+
+
 def test_divide_endpoint():
     r = client.get("/divide", params={"a": 10, "b": 2})
     assert r.status_code == 200
