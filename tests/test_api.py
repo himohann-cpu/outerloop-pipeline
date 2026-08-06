@@ -17,6 +17,12 @@ def test_add_endpoint():
     assert r.json() == {"result": 5}
 
 
+def test_subtract_endpoint():
+    r = client.get("/subtract", params={"a": 5, "b": 3})
+    assert r.status_code == 200
+    assert r.json() == {"result": 2}
+
+
 def test_divide_endpoint():
     r = client.get("/divide", params={"a": 10, "b": 2})
     assert r.status_code == 200

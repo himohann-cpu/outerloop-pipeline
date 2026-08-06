@@ -5,7 +5,7 @@ smoke-tested by the deploy stage in ci-pipeline.yml.
 """
 from fastapi import FastAPI, HTTPException
 
-from app.calculator import add, divide
+from app.calculator import add, divide, subtract
 
 app = FastAPI(title="Outer-Loop Demo App")
 
@@ -18,6 +18,11 @@ def health():
 @app.get("/add")
 def add_endpoint(a: float, b: float):
     return {"result": add(a, b)}
+
+
+@app.get("/subtract")
+def subtract_endpoint(a: float, b: float):
+    return {"result": subtract(a, b)}
 
 
 @app.get("/divide")
