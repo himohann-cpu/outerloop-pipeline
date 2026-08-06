@@ -9,7 +9,7 @@ commit comment so the failure is never silent.
 import os
 import subprocess
 
-from common.claude_client import ClaudeClient
+from common.gemini_client import GeminiClient
 from common.github_client import GitHubClient
 from common.git_ops import try_apply_fix
 from common.cost_tracker import CostTracker
@@ -83,7 +83,7 @@ def main():
     short_sha = sha[:7]
     base_branch = target_branch(gh)
     cost_tracker = CostTracker()
-    client = ClaudeClient(cost_tracker=cost_tracker)
+    client = GeminiClient(cost_tracker=cost_tracker)
 
     report_sections = ["## 🤖 Failure Analysis & Auto-Fix\n"]
 

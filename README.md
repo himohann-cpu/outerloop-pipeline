@@ -3,12 +3,12 @@
 A CI/CD pipeline with two cooperating agent groups:
 
 1. **PR Review agents** (`.github/workflows/agent-pipeline.yml`) — five
-   Claude agents review every pull request's diff in parallel (code review,
+   Gemini agents review every pull request's diff in parallel (code review,
    test coverage, security, docs, **cost impact**) and post a combined
    comment, including the LLM spend of the run itself.
 2. **Build/Test/Deploy + Failure Analysis agents**
    (`.github/workflows/ci-pipeline.yml`) — a real build → test → deploy
-   pipeline. If any stage fails, three specialized Claude agents diagnose
+   pipeline. If any stage fails, three specialized Gemini agents diagnose
    *why*, and attempt to open an auto-fix pull request with a patch.
 
 This is an "outer loop" pipeline in the sense that everything runs *after*
@@ -45,32 +45,31 @@ so wall-clock time is roughly one agent call, not five sequential ones.
 new or upsized cloud resources, heavy new dependencies, N+1 or per-request
 external calls that scale with traffic, unbounded loops/fetches, high-
 frequency scheduled jobs, unbounded logging/storage growth. It's built with
-**LangChain** (`ChatAnthropic`) rather than the raw Anthropic SDK the other
-agents use, as a second orchestration path in the same pipeline.
+**LangChain** rather than the raw Gemini SDK the other agents use, as a
+second orchestration path in the same pipeline.
 
 Separately, every agent — LangChain or raw SDK — reports its own token
 usage into a shared `CostTracker` (`common/cost_tracker.py`), which prices
-each call against Anthropic's official per-model rate card and appends a
-collapsible cost breakdown to the bottom of the PR comment:
+each call against the configured model pricing and appends a collapsible
+cost breakdown to the bottom of the PR comment:
 
 ```
 💰 LLM cost for this run: $0.0193 (6,214 tokens across 5 calls)
 | Agent | Model | Input tokens | Output tokens | Cost |
 |---|---|---|---|---|
-| Code Review | claude-sonnet-5 | 1,102 | 240 | $0.0046 |
-| Test Coverage | claude-sonnet-5 | 980 | 190 | $0.0038 |
-| Security | claude-sonnet-5 | 1,050 | 210 | $0.0041 |
-| Docs & Changelog | claude-sonnet-5 | 890 | 175 | $0.0032 |
-| Cost Impact | claude-sonnet-5 | 1,192 | 195 | $0.0036 |
+| Code Review | gemini-1.5-pro | 1,102 | 240 | $0.0046 |
+| Test Coverage | gemini-1.5-pro | 980 | 190 | $0.0038 |
+| Security | gemini-1.5-pro | 1,050 | 210 | $0.0041 |
+| Docs & Changelog | gemini-1.5-pro | 890 | 175 | $0.0032 |
+| Cost Impact | gemini-1.5-pro | 1,192 | 195 | $0.0036 |
 ```
 
 The failure-analysis pipeline (`failure_orchestrator.py`) tracks and reports
 the same way, so a failed build/test/deploy run shows what its own
 diagnosis + auto-fix attempt cost.
 
-Rates are hardcoded from [Anthropic's pricing page](https://platform.claude.com/docs/en/about-claude/pricing)
-in `common/cost_tracker.py` — update `PRICING` if rates change (note:
-Sonnet 5's introductory $2/$10 rate reverts to $3/$15 on September 1, 2026).
+Rates are hardcoded in `common/cost_tracker.py` — update `PRICING` if
+your model or pricing plan changes.
 
 ### Build / Test / Deploy + Failure Analysis
 
@@ -163,7 +162,7 @@ secret) — the rest of the pipeline doesn't need to change.
 │   ├── test_failure_agent.py
 │   └── deployment_failure_agent.py
 ├── common/
-│   ├── claude_client.py          # Anthropic API wrapper (retries, model config, cost tracking)
+│   ├── gemini_client.py          # Gemini API wrapper (retries, model config, cost tracking)
 │   ├── github_client.py          # GitHub REST helper (diffs, comments, PRs)
 │   ├── git_ops.py                # Safe patch-apply + branch + push helper
 │   └── cost_tracker.py           # Shared LLM spend tracker (raw SDK + LangChain agents)
@@ -182,7 +181,9 @@ secret) — the rest of the pipeline doesn't need to change.
 
 1. Push this folder's contents to a new GitHub repository.
 2. In the repo, go to **Settings → Secrets and variables → Actions** and add:
-   - `ANTHROPIC_API_KEY` — your Anthropic API key
+   - `GEMINI_API_KEY` — your Gemini API key
+   - `GCP_SA_KEY` — your GCP service account JSON key
+   - `GCP_PROJECT_ID` — your GCP project ID
    - (`GITHUB_TOKEN` is provided automatically by Actions — no setup needed)
 3. Create a branch, make a small code change, and open a pull request against `main`.
 4. Watch the **Actions** tab: the `Multi-Agent Outer Loop` workflow runs automatically.
@@ -236,8 +237,8 @@ Check the **commit's** comments (not the PR) for the diagnosis, and the
   to `AGENT_CLASSES` in `orchestrator.py`.
 - **Change trigger**: edit the `on:` block in the workflow — e.g. run on
   `push` to `main` directly instead of `pull_request`, or add a `schedule`.
-- **Swap the model**: set `CLAUDE_MODEL` as a repo variable/env var (defaults
-  to `claude-sonnet-5`).
+- **Swap the model**: set `GEMINI_MODEL` as a repo variable/env var (defaults
+  to `gemini-1.5-pro`).
 - **Gate merges**: mark the `agent-review` check as required in branch
   protection rules once you're happy with its signal-to-noise ratio.
 
@@ -248,13 +249,11 @@ GitHub Actions:
 
 ```bash
 pip install -r requirements.txt
-export ANTHROPIC_API_KEY=sk-...
+export GEMINI_API_KEY=sk-...
 python - <<'EOF'
-from common.claude_client import ClaudeClient
+from common.gemini_client import GeminiClient
 from agents.code_review_agent import CodeReviewAgent
 
 diff = open("example.diff").read()
-agent = CodeReviewAgent(ClaudeClient())
-print(agent.run(diff, ["example.py"]))
-EOF
+agent = CodeReviewAgent(GeminiClient())
 ```

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from common.claude_client import ClaudeClient
+from common.gemini_client import GeminiClient
 
 
 @dataclass
@@ -17,7 +17,7 @@ class FailureBaseAgent:
     name: str = "base-failure"
     system_prompt: str = ""
 
-    def __init__(self, client: ClaudeClient):
+    def __init__(self, client: GeminiClient):
         self.client = client
 
     def build_user_prompt(self, log_text: str) -> str:

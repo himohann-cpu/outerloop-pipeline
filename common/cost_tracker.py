@@ -1,20 +1,14 @@
-"""Tracks estimated USD cost of every Claude API call made during a pipeline
-run, across both the raw-Anthropic-SDK agents and the LangChain-based agent.
+"""Tracks estimated USD cost of every Gemini API call made during a pipeline
+run, across both the raw SDK agents and the LangChain-based agent.
 
-Rates are Anthropic's official per-model pricing
-(https://platform.claude.com/docs/en/about-claude/pricing) as of Aug 2026.
-Update PRICING if rates change — Sonnet 5's introductory rate in particular
-reverts to $3/$15 on September 1, 2026.
+Rates are currently hardcoded from an early Gemini pricing model and should
+be updated if you switch to a different model or pricing plan.
 """
 from dataclasses import dataclass, field
 
 # USD per 1,000,000 tokens: (input, output)
 PRICING = {
-    "claude-sonnet-5": (2.00, 10.00),          # introductory rate through Aug 31, 2026
-    "claude-opus-4-8": (5.00, 25.00),
-    "claude-haiku-4-5-20251001": (1.00, 5.00),
-    "claude-haiku-4-5": (1.00, 5.00),
-    "claude-fable-5": (10.00, 50.00),
+    "gemini-1.5-pro": (2.00, 10.00),
 }
 DEFAULT_PRICING = (3.00, 15.00)  # fallback for an unlisted/future model
 
@@ -31,7 +25,7 @@ class UsageEntry:
 @dataclass
 class CostTracker:
     """Shared across every agent in one orchestrator run — pass the same
-    instance to ClaudeClient(cost_tracker=...) and to CostImpactAgent."""
+    instance to GeminiClient(cost_tracker=...) and to CostImpactAgent."""
 
     entries: list = field(default_factory=list)
 

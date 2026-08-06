@@ -1,7 +1,7 @@
 """Outer-loop multi-agent orchestrator.
 
 Triggered by CI after code is pushed (see .github/workflows/agent-pipeline.yml).
-Fetches the PR diff, fans it out to several specialized Claude agents in
+Fetches the PR diff, fans it out to several specialized Gemini agents in
 parallel, aggregates their verdicts into one report, posts it as a PR
 comment, writes it to the GitHub Actions job summary, and exits non-zero if
 any agent returned FAIL (so the check can gate merges if desired).
@@ -11,7 +11,7 @@ import os
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from common.claude_client import ClaudeClient
+from common.gemini_client import GeminiClient
 from common.github_client import GitHubClient
 from common.cost_tracker import CostTracker
 from agents.code_review_agent import CodeReviewAgent
@@ -41,7 +41,7 @@ def get_pr_number() -> int:
 
 
 def run_agents_in_parallel(diff: str, changed_files: list[str], cost_tracker: CostTracker):
-    client = ClaudeClient(cost_tracker=cost_tracker)
+    client = GeminiClient(cost_tracker=cost_tracker)
     agents = [cls(client) for cls in AGENT_CLASSES]
     agents.append(CostImpactAgent(cost_tracker=cost_tracker))  # LangChain-based
 
