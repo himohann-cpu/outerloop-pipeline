@@ -1,0 +1,117 @@
+name: CI Pipeline (Build / Test / Deploy) + Failure Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build container image
+        run: |
+          set -o pipefail
+          docker build -t demo-app:${{ github.sha }} . 2>&1 | tee build.log
+      - name: Save image artifact
+        if: success()
+        run: docker save demo-app:${{ github.sha }} -o demo-app-image.tar
+      - name: Upload image artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: demo-app-image.tar
+          retention-days: 1
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          set -o pipefail
+          pytest 2>&1 | tee test.log
+      - name: Upload test log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log
+          path: test.log
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download container image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+      - name: Load image
+        run: docker load -i demo-app-image.tar
+      - name: Deploy (smoke-test container)
+        env:
+          IMAGE_TAG: demo-app:${{ github.sha }}
+          FORCE_DEPLOY_FAILURE: ${{ vars.FORCE_DEPLOY_FAILURE }}
+        run: |
+          set -o pipefail
+          bash scripts/deploy.sh 2>&1 | tee deploy.log
+      - name: Upload deploy log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-log
+          path: deploy.log
+
+  failure-analysis:
+    needs: [build, test, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Download failure logs
+        uses: actions/download-artifact@v4
+        with:
+          path: logs
+          pattern: "*-log"
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Configure git identity
+        run: |
+          git config user.name "agent-outerloop-bot"
+          git config user.email "agent-outerloop-bot@users.noreply.github.com"
+
+      - name: Diagnose failure and attempt auto-fix
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python failure_orchestrator.py

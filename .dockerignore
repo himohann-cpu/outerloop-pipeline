@@ -1,0 +1,14 @@
+.git
+.github
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/
+scripts/
+common/
+agents/
+orchestrator.py
+failure_orchestrator.py
+*.md
+*.zip
+logs/
