@@ -111,8 +111,98 @@ jobs:
           name: deploy-log
           path: deploy.log
 
-  failure-analysis:
-    needs: [build, test, deploy]
+  failure-analysis-build:
+    needs: [build]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+
+      - name: Configure gcloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Install gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Download failure logs
+        uses: actions/download-artifact@v4
+        with:
+          path: logs
+          pattern: "*-log"
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Configure git identity
+        run: |
+          git config user.name "agent-outerloop-bot"
+          git config user.email "agent-outerloop-bot@users.noreply.github.com"
+
+      - name: Diagnose failure and attempt auto-fix
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python failure_orchestrator.py
+
+  failure-analysis-test:
+    needs: [test]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+
+      - name: Configure gcloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Install gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Download failure logs
+        uses: actions/download-artifact@v4
+        with:
+          path: logs
+          pattern: "*-log"
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Configure git identity
+        run: |
+          git config user.name "agent-outerloop-bot"
+          git config user.email "agent-outerloop-bot@users.noreply.github.com"
+
+      - name: Diagnose failure and attempt auto-fix
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python failure_orchestrator.py
+
+  failure-analysis-deploy:
+    needs: [deploy]
     if: failure()
     runs-on: ubuntu-latest
     steps:
