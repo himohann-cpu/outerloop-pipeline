@@ -113,16 +113,9 @@ jobs:
 
   failure-analysis-build:
     needs: [build]
-    if: always()
+    if: needs.build.result == 'failure'
     runs-on: ubuntu-latest
     steps:
-      - name: Print build result
-        run: echo "build result = ${{ needs.build.result }}"
-
-      - name: Check whether build failed
-        if: needs.build.result != 'failure'
-        run: echo "Build did not fail, skipping failure analysis."
-
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref || github.ref }}
