@@ -3,6 +3,9 @@
 Intentionally simple — swap this out for your real application code. It
 exists so the build/test/deploy stages (and the failure-analysis agents)
 have something real to run against.
+
+Deploy-failure demo run: triggered with FORCE_DEPLOY_FAILURE=true to
+exercise the DeploymentFailureAgent path.
 """
 
 
