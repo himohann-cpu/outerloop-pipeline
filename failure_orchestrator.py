@@ -94,6 +94,10 @@ def main():
         agent = agent_cls(client)
         analysis = agent.run(log_text)
 
+        raw_response = getattr(agent, "raw_response", None)
+        if raw_response is not None:
+            print(f"DEBUG [{stage}] raw agent response:\n{raw_response}\n")
+
         fix_pr_url = None
         if analysis.patch:
             branch_name = f"agent-fix/{stage}-{short_sha}"

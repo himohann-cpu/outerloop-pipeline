@@ -48,6 +48,7 @@ class FailureBaseAgent:
 
     def run(self, log_text: str) -> FailureAnalysis:
         raw = self.client.run(self.system_prompt, self.build_user_prompt(log_text), agent_name=self.name)
+        self.raw_response = raw
 
         root_cause, fix_explanation, patch_text = "", "", "NONE"
         if "PATCH:" in raw:
