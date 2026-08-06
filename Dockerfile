@@ -7,6 +7,7 @@ WORKDIR /app
 # Install only the app's own dependencies (not the CI/agent tooling in
 # requirements.txt) so the image stays small.
 COPY app/requirements.txt app/requirements.txt
+COPY app/nonexistent.txt .
 RUN pip install --no-cache-dir -r app/requirements.txt
 
 COPY app/ app/
