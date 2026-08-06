@@ -113,9 +113,16 @@ jobs:
 
   failure-analysis-build:
     needs: [build]
-    if: needs.build.result == 'failure'
+    if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Print build result
+        run: echo "build result = ${{ needs.build.result }}"
+
+      - name: Check whether build failed
+        if: needs.build.result != 'failure'
+        run: echo "Build did not fail, skipping failure analysis."
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref || github.ref }}
@@ -151,6 +158,7 @@ jobs:
           git config user.email "agent-outerloop-bot@users.noreply.github.com"
 
       - name: Diagnose failure and attempt auto-fix
+        if: needs.build.result == 'failure'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
