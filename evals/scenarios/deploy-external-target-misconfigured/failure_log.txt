@@ -1,0 +1,9 @@
+Starting container from image: demo-app:9b2d7c41e6a05f38c1d4e7f0a3b6c9d2e5f81470
+0d5e8b1a4c7f2e9d6b3a0c5f8e1d4b7a2c9f6e3d0b5a8c1f4e7d2b9a6c3f0e5d
+Waiting for health check...
+ERROR: health check target unreachable — DEPLOY_TARGET_URL misconfigured
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+##[error]Process completed with exit code 1.

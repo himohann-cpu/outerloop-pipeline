@@ -1,0 +1,28 @@
+======================================= test session starts ========================================
+platform linux -- Python 3.12.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/runner/work/outerloop-pipeline/outerloop-pipeline
+plugins: anyio-4.15.1
+collected 9 items
+
+tests/test_api.py ....F                                                                      [ 55%]
+tests/test_calculator.py ....                                                                [100%]
+
+============================================= FAILURES =============================================
+___________________________________ test_divide_by_zero_endpoint ___________________________________
+
+    def test_divide_by_zero_endpoint():
+        r = client.get("/divide", params={"a": 1, "b": 0})
+>       assert r.status_code == 400
+E       assert 500 == 400
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_api.py:34: AssertionError
+========================================= warnings summary =========================================
+../../opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53
+  /opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+===================================== short test summary info ======================================
+FAILED tests/test_api.py::test_divide_by_zero_endpoint - assert 500 == 400
+============================== 1 failed, 8 passed, 1 warning in 0.61s ==============================

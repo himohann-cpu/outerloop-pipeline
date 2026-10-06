@@ -1,0 +1,58 @@
+name: Agent Evals
+
+# Free checks run on every PR that touches the agents or the evals.
+# The paid, live-model run is manual or weekly.
+on:
+  pull_request:
+    paths: ["agents/**", "common/**", "evals/**", ".github/workflows/agent-evals.yml"]
+  workflow_dispatch:
+    inputs:
+      trials:
+        description: "Live runs per scenario"
+        default: "3"
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  self-check:
+    name: Harness self-check (no model calls)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Harness unit tests
+        run: python -m pytest evals/tests -q
+      - name: Oracle run (a perfect model must score 100%)
+        run: python -m evals.run --client oracle --thresholds evals/thresholds.oracle.json
+
+  live:
+    name: Live model eval
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Run scenarios against the live model
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: >
+          python -m evals.run --client live
+          --record run-${{ github.run_number }}
+          --trials ${{ github.event.inputs.trials || '3' }}
+      - name: Upload report and recordings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-eval-${{ github.run_number }}
+          path: |
+            evals/results/
+            evals/recordings/

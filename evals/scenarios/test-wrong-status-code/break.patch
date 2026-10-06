@@ -1,0 +1,10 @@
+diff --git a/app/main.py b/app/main.py
+index d6855d7..0b96a66 100644
+--- a/app/main.py
++++ b/app/main.py
+@@ -30,4 +30,4 @@ def divide_endpoint(a: float, b: float):
+     try:
+         return {"result": divide(a, b)}
+     except ValueError as e:
+-        raise HTTPException(status_code=400, detail=str(e))
++        raise HTTPException(status_code=500, detail=str(e))

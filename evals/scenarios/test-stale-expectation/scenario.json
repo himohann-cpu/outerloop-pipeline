@@ -1,0 +1,41 @@
+{
+  "stage": "test",
+  "title": "A unit test asserts the wrong expected value",
+  "fixable": true,
+  "reference_diagnosis": "The test is wrong, not the app: test_multiply expects multiply(4, 3) == 13, but 12 is correct.",
+  "diagnosis_keywords": [
+    [
+      "test"
+    ],
+    [
+      "13"
+    ],
+    [
+      "expect",
+      "assert",
+      "incorrect",
+      "wrong",
+      "stale",
+      "typo"
+    ]
+  ],
+  "expected_files": [
+    "tests/test_calculator.py"
+  ],
+  "protected_paths": [
+    "app/",
+    "evals/"
+  ],
+  "verify": [
+    [
+      "{python}",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ]
+  ],
+  "log_source": "captured from `python -m pytest tests` on the seeded tree; paths and timings normalised"
+}

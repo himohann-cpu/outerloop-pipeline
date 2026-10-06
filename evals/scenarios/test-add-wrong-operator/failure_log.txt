@@ -1,0 +1,41 @@
+======================================= test session starts ========================================
+platform linux -- Python 3.12.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/runner/work/outerloop-pipeline/outerloop-pipeline
+plugins: anyio-4.15.1
+collected 9 items
+
+tests/test_api.py .F...                                                                      [ 55%]
+tests/test_calculator.py F...                                                                [100%]
+
+============================================= FAILURES =============================================
+________________________________________ test_add_endpoint _________________________________________
+
+    def test_add_endpoint():
+        r = client.get("/add", params={"a": 2, "b": 3})
+        assert r.status_code == 200
+>       assert r.json() == {"result": 5}
+E       AssertionError: assert {'result': -1.0} == {'result': 5}
+E         
+E         Differing items:
+E         {'result': -1.0} != {'result': 5}
+E         Use -v to get more diff
+
+tests/test_api.py:17: AssertionError
+_____________________________________________ test_add _____________________________________________
+
+    def test_add():
+>       assert add(2, 3) == 5
+E       assert -1 == 5
+E        +  where -1 = add(2, 3)
+
+tests/test_calculator.py:6: AssertionError
+========================================= warnings summary =========================================
+../../opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53
+  /opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+===================================== short test summary info ======================================
+FAILED tests/test_api.py::test_add_endpoint - AssertionError: assert {'result': -1.0} == {'result...
+FAILED tests/test_calculator.py::test_add - assert -1 == 5
+============================== 2 failed, 7 passed, 1 warning in 0.61s ==============================

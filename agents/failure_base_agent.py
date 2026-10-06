@@ -36,14 +36,16 @@ class FailureBaseAgent:
 
     @staticmethod
     def _strip_fences(text: str) -> str:
-        text = text.strip()
+        # Trim blank lines only: a trailing " " line is real diff context, and
+        # stripping it makes `git apply` reject the patch as corrupt.
+        text = text.lstrip().rstrip("\r\n")
         if text.startswith("```"):
             lines = text.splitlines()
             if lines and lines[0].startswith("```"):
                 lines = lines[1:]
             if lines and lines[-1].startswith("```"):
                 lines = lines[:-1]
-            text = "\n".join(lines).strip()
+            text = "\n".join(lines).strip("\r\n")
         return text
 
     def run(self, log_text: str) -> FailureAnalysis:
@@ -68,7 +70,7 @@ class FailureBaseAgent:
         fix_explanation = fix_explanation.strip()
         patch_text = self._strip_fences(patch_text)
 
-        patch = patch_text if patch_text and patch_text.upper() != "NONE" else None
+        patch = patch_text if patch_text.strip() and patch_text.strip().upper() != "NONE" else None
 
         return FailureAnalysis(
             agent_name=self.name,

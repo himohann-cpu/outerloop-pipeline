@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.7, pytest-8.3.3, pluggy-1.5.0
+rootdir: /home/runner/work/outerloop-pipeline/outerloop-pipeline
+plugins: anyio-4.6.2
+collected 9 items
+
+tests/test_api.py ..
+INTERNALERROR> Traceback (most recent call last):
+INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/_pytest/main.py", line 283, in wrap_session
+INTERNALERROR>     session.exitstatus = doit(config, session) or 0
+INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/_pytest/main.py", line 337, in _main
+INTERNALERROR>     config.hook.pytest_runtestloop(session=session)
+INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/_pytest/cacheprovider.py", line 429, in pytest_sessionfinish
+INTERNALERROR>     config.cache.set("cache/lastfailed", self.lastfailed)
+INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/_pytest/tmpdir.py", line 152, in getbasetemp
+INTERNALERROR>     basetemp = make_numbered_dir_with_cleanup(
+INTERNALERROR>   File "/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/pathlib.py", line 1311, in mkdir
+INTERNALERROR>     os.mkdir(self, mode)
+INTERNALERROR> OSError: [Errno 28] No space left on device: '/tmp/pytest-of-runner/pytest-0'
+
+============================ no tests ran in 0.61s =============================
+##[error]Process completed with exit code 3.

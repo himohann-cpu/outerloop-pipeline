@@ -1,0 +1,29 @@
+{
+  "stage": "build",
+  "title": "A dependency is pinned to a version that does not exist",
+  "fixable": true,
+  "reference_diagnosis": "app/requirements.txt pins fastapi==99.0.0, a version that does not exist on PyPI, so pip cannot install it.",
+  "diagnosis_keywords": [
+    [
+      "fastapi"
+    ],
+    [
+      "99.0.0"
+    ]
+  ],
+  "expected_files": [
+    "app/requirements.txt"
+  ],
+  "protected_paths": [
+    "evals/"
+  ],
+  "verify": [
+    [
+      "{python}",
+      "evals/checks/requirements_check.py",
+      "fastapi",
+      "uvicorn"
+    ]
+  ],
+  "log_source": "authored to match real tool output; replace with a log captured from your CI"
+}

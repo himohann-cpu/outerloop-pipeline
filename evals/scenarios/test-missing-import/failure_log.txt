@@ -1,0 +1,125 @@
+======================================= test session starts ========================================
+platform linux -- Python 3.12.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/runner/work/outerloop-pipeline/outerloop-pipeline
+plugins: anyio-4.15.1
+collected 9 items
+
+tests/test_api.py ..F..                                                                      [ 55%]
+tests/test_calculator.py ....                                                                [100%]
+
+============================================= FAILURES =============================================
+______________________________________ test_multiply_endpoint ______________________________________
+
+    def test_multiply_endpoint():
+>       r = client.get("/multiply", params={"a": 4, "b": 3})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_api.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:483: in get
+    return super().get(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/httpx2/_client.py:1113: in get
+    return self.request(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:455: in request
+    return super().request(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/httpx2/_client.py:797: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/httpx2/_client.py:980: in send
+    response = self._send_handling_auth(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/httpx2/_client.py:1008: in _send_handling_auth
+    response = self._send_handling_redirects(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/httpx2/_client.py:1043: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/httpx2/_client.py:1076: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:354: in handle_request
+    raise exc
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:351: in handle_request
+    portal.call(self.app, scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/concurrent/futures/_base.py:460: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.13/concurrent/futures/_base.py:402: in __get_result
+    raise self._exception
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/applications.py:1215: in __call__
+    await super().__call__(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/routing.py:670: in __call__
+    await self.middleware_stack(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/routing.py:2786: in app
+    await route.handle(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/routing.py:1310: in handle
+    await super().handle(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/routing.py:280: in handle
+    await self.app(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/routing.py:165: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/routing.py:151: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/routing.py:727: in app
+    raw_response = await run_endpoint_function(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/routing.py:362: in run_endpoint_function
+    return await run_in_threadpool(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/fastapi/telemetry/_api.py:240: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = 4.0, b = 3.0
+
+    @app.get("/multiply")
+    def multiply_endpoint(a: float, b: float):
+>       return {"result": multiply(a, b)}
+                          ^^^^^^^^
+E       NameError: name 'multiply' is not defined
+
+app/main.py:25: NameError
+========================================= warnings summary =========================================
+../../opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53
+  /opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+===================================== short test summary info ======================================
+FAILED tests/test_api.py::test_multiply_endpoint - NameError: name 'multiply' is not defined
+============================== 1 failed, 8 passed, 1 warning in 0.61s ==============================

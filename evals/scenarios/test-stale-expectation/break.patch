@@ -1,0 +1,13 @@
+diff --git a/tests/test_calculator.py b/tests/test_calculator.py
+index e549b69..1fedaad 100644
+--- a/tests/test_calculator.py
++++ b/tests/test_calculator.py
+@@ -7,7 +7,7 @@ def test_add():
+ 
+ 
+ def test_multiply():
+-    assert multiply(4, 3) == 12
++    assert multiply(4, 3) == 13
+ 
+ 
+ def test_divide():

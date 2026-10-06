@@ -1,0 +1,13 @@
+diff --git a/app/calculator.py b/app/calculator.py
+index 6d39114..35cdbb3 100644
+--- a/app/calculator.py
++++ b/app/calculator.py
+@@ -10,7 +10,7 @@ DeploymentFailureAgent path; variable reset to false afterward.
+ 
+ 
+ def add(a, b):
+-    return a + b
++    return a - b
+ 
+ 
+ def multiply(a, b):

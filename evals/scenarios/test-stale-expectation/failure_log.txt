@@ -1,0 +1,27 @@
+======================================= test session starts ========================================
+platform linux -- Python 3.12.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/runner/work/outerloop-pipeline/outerloop-pipeline
+plugins: anyio-4.15.1
+collected 9 items
+
+tests/test_api.py .....                                                                      [ 55%]
+tests/test_calculator.py .F..                                                                [100%]
+
+============================================= FAILURES =============================================
+__________________________________________ test_multiply ___________________________________________
+
+    def test_multiply():
+>       assert multiply(4, 3) == 13
+E       assert 12 == 13
+E        +  where 12 = multiply(4, 3)
+
+tests/test_calculator.py:10: AssertionError
+========================================= warnings summary =========================================
+../../opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53
+  /opt/hostedtoolcache/Python/3.12.7/x64/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+===================================== short test summary info ======================================
+FAILED tests/test_calculator.py::test_multiply - assert 12 == 13
+============================== 1 failed, 8 passed, 1 warning in 0.61s ==============================

@@ -1,0 +1,37 @@
+{
+  "stage": "test",
+  "title": "add() subtracts instead of adding",
+  "fixable": true,
+  "reference_diagnosis": "add() in app/calculator.py returns a - b instead of a + b.",
+  "diagnosis_keywords": [
+    [
+      "add"
+    ],
+    [
+      "subtract",
+      "a - b",
+      "minus",
+      "operator",
+      "instead of"
+    ]
+  ],
+  "expected_files": [
+    "app/calculator.py"
+  ],
+  "protected_paths": [
+    "tests/",
+    "evals/"
+  ],
+  "verify": [
+    [
+      "{python}",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ]
+  ],
+  "log_source": "captured from `python -m pytest tests` on the seeded tree; paths and timings normalised"
+}

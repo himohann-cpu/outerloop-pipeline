@@ -1,0 +1,6 @@
+{
+  "diagnosis_accuracy": {"min": 0.8},
+  "verified_fix_rate": {"min": 0.5},
+  "abstention_accuracy": {"min": 1.0},
+  "harmful_pr_rate": {"max": 0.0}
+}

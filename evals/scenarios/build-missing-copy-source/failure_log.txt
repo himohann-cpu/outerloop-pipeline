@@ -1,0 +1,47 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 721B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 148B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/python:3.12-slim@sha256:af4e85f1cac90dd3771e47292ea7c8a9830abfabbe4faa5c53f158854c2e819d
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 2.31kB done
+#5 DONE 0.0s
+
+#6 [2/6] WORKDIR /app
+#6 CACHED
+
+#7 [3/6] COPY app/requirements.txt app/requirements.txt
+#7 CACHED
+
+#8 [4/6] RUN pip install --no-cache-dir -r app/requirements.txt
+#8 CACHED
+
+#9 [5/6] COPY app/ app/
+#9 CACHED
+
+#10 [6/6] COPY app/nonexistent.txt .
+#10 ERROR: failed to calculate checksum of ref 7c1f2a9e-5d0b-4c6e-9a41-2b8d3f6e0c57::q1n8x4m2v7k0s5j3h9d6f2a1b: "/app/nonexistent.txt": not found
+------
+ > [6/6] COPY app/nonexistent.txt .:
+------
+Dockerfile:13
+--------------------
+  11 |     
+  12 |     COPY app/ app/
+  13 | >>> COPY app/nonexistent.txt .
+  14 |     
+  15 |     EXPOSE 8000
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref 7c1f2a9e-5d0b-4c6e-9a41-2b8d3f6e0c57::q1n8x4m2v7k0s5j3h9d6f2a1b: "/app/nonexistent.txt": not found
+##[error]Process completed with exit code 1.

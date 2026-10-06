@@ -1,0 +1,8 @@
+diff --git a/app/requirements.txt b/app/requirements.txt
+index 7c608d9..110fbb9 100644
+--- a/app/requirements.txt
++++ b/app/requirements.txt
+@@ -1,2 +1,2 @@
+-fastapi>=0.110.0
++fastapi==99.0.0
+ uvicorn[standard]>=0.29.0

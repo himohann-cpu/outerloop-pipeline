@@ -1,0 +1,35 @@
+{
+  "stage": "test",
+  "title": "An endpoint uses a function that is no longer imported",
+  "fixable": true,
+  "reference_diagnosis": "app/main.py no longer imports multiply from app.calculator, so /multiply raises NameError.",
+  "diagnosis_keywords": [
+    [
+      "multiply"
+    ],
+    [
+      "import",
+      "not defined",
+      "nameerror"
+    ]
+  ],
+  "expected_files": [
+    "app/main.py"
+  ],
+  "protected_paths": [
+    "tests/",
+    "evals/"
+  ],
+  "verify": [
+    [
+      "{python}",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ]
+  ],
+  "log_source": "captured from `python -m pytest tests` on the seeded tree; paths and timings normalised"
+}

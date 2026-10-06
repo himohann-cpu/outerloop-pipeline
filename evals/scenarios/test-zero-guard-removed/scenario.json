@@ -1,0 +1,39 @@
+{
+  "stage": "test",
+  "title": "divide() lost its divide-by-zero guard",
+  "fixable": true,
+  "reference_diagnosis": "divide() in app/calculator.py no longer raises ValueError when b is zero, so a ZeroDivisionError escapes.",
+  "diagnosis_keywords": [
+    [
+      "zero"
+    ],
+    [
+      "divide",
+      "division"
+    ],
+    [
+      "valueerror",
+      "guard",
+      "check"
+    ]
+  ],
+  "expected_files": [
+    "app/calculator.py"
+  ],
+  "protected_paths": [
+    "tests/",
+    "evals/"
+  ],
+  "verify": [
+    [
+      "{python}",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ]
+  ],
+  "log_source": "captured from `python -m pytest tests` on the seeded tree; paths and timings normalised"
+}

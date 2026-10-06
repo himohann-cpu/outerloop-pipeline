@@ -1,0 +1,12 @@
+diff --git a/Dockerfile b/Dockerfile
+index fa1c8fb..dc9d4a7 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -10,6 +10,7 @@ COPY app/requirements.txt app/requirements.txt
+ RUN pip install --no-cache-dir -r app/requirements.txt
+ 
+ COPY app/ app/
++COPY app/nonexistent.txt .
+ 
+ EXPOSE 8000
+ 

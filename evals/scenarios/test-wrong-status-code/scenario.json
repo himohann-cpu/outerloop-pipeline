@@ -1,0 +1,33 @@
+{
+  "stage": "test",
+  "title": "Divide-by-zero returns HTTP 500 instead of 400",
+  "fixable": true,
+  "reference_diagnosis": "The /divide endpoint in app/main.py maps the ValueError to status 500 instead of 400.",
+  "diagnosis_keywords": [
+    [
+      "400"
+    ],
+    [
+      "500"
+    ]
+  ],
+  "expected_files": [
+    "app/main.py"
+  ],
+  "protected_paths": [
+    "tests/",
+    "evals/"
+  ],
+  "verify": [
+    [
+      "{python}",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ]
+  ],
+  "log_source": "captured from `python -m pytest tests` on the seeded tree; paths and timings normalised"
+}

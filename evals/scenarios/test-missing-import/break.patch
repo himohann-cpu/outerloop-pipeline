@@ -1,0 +1,13 @@
+diff --git a/app/main.py b/app/main.py
+index d6855d7..1a18b6f 100644
+--- a/app/main.py
++++ b/app/main.py
+@@ -5,7 +5,7 @@ smoke-tested by the deploy stage in ci-pipeline.yml.
+ """
+ from fastapi import FastAPI, HTTPException
+ 
+-from app.calculator import add, divide, multiply
++from app.calculator import add, divide
+ 
+ app = FastAPI(title="Outer-Loop Demo App")
+ 

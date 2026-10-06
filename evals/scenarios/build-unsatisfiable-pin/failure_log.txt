@@ -1,0 +1,45 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 692B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 148B done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/library/python:3.12-slim@sha256:af4e85f1cac90dd3771e47292ea7c8a9830abfabbe4faa5c53f158854c2e819d
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 2.29kB done
+#5 DONE 0.0s
+
+#6 [2/5] WORKDIR /app
+#6 CACHED
+
+#7 [3/5] COPY app/requirements.txt app/requirements.txt
+#7 DONE 0.0s
+
+#8 [4/5] RUN pip install --no-cache-dir -r app/requirements.txt
+#8 1.412 ERROR: Could not find a version that satisfies the requirement fastapi==99.0.0 (from versions: 0.1.0, 0.1.2, 0.1.3, 0.100.0, 0.100.1, 0.101.0, 0.103.2, 0.104.1, 0.108.0, 0.109.2, 0.110.0, 0.110.3, 0.111.0, 0.111.1, 0.112.0, 0.112.4, 0.113.0, 0.114.2, 0.115.0, 0.115.4)
+#8 1.413 ERROR: No matching distribution found for fastapi==99.0.0
+#8 ERROR: process "/bin/sh -c pip install --no-cache-dir -r app/requirements.txt" did not complete successfully: exit code: 1
+------
+ > [4/5] RUN pip install --no-cache-dir -r app/requirements.txt:
+1.412 ERROR: Could not find a version that satisfies the requirement fastapi==99.0.0 (from versions: 0.1.0, 0.1.2, 0.1.3, 0.100.0, 0.100.1, 0.101.0, 0.103.2, 0.104.1, 0.108.0, 0.109.2, 0.110.0, 0.110.3, 0.111.0, 0.111.1, 0.112.0, 0.112.4, 0.113.0, 0.114.2, 0.115.0, 0.115.4)
+1.413 ERROR: No matching distribution found for fastapi==99.0.0
+------
+Dockerfile:10
+--------------------
+   8 |     # requirements.txt) so the image stays small.
+   9 |     COPY app/requirements.txt app/requirements.txt
+  10 | >>> RUN pip install --no-cache-dir -r app/requirements.txt
+  11 |     
+  12 |     COPY app/ app/
+--------------------
+ERROR: failed to solve: process "/bin/sh -c pip install --no-cache-dir -r app/requirements.txt" did not complete successfully: exit code: 1
+##[error]Process completed with exit code 1.

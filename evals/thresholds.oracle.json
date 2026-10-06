@@ -1,0 +1,7 @@
+{
+  "diagnosis_accuracy": {"min": 1.0},
+  "verified_fix_rate": {"min": 1.0},
+  "patch_apply_rate": {"min": 1.0},
+  "abstention_accuracy": {"min": 1.0},
+  "harmful_pr_rate": {"max": 0.0}
+}
